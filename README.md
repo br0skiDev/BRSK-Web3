@@ -76,3 +76,30 @@ contract Presale {
     }
 }
 ```
+
+## Deploy Script
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.26;
+
+import "forge-std/Script.sol";
+import "../src/BRSK.sol";
+import "../src/Presale.sol";
+
+contract Deploy is Script {
+    function run() external {
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
+
+        BRSK token = new BRSK(1000000 * 10 ** 18); // 1 million tokens
+        uint256 rate = 100; // 1 ETH = 100 BRSK
+        uint256 startTime = block.timestamp + 60; // Presale starts in 1 minute
+        uint256 endTime = startTime + 86400; // Presale lasts 24 hours
+        Presale presale = new Presale(address(token), rate, startTime, endTime);
+
+        token.transfer(address(presale), 800000 * 10 ** 18); // 800,000 tokens to presale contract
+
+        vm.stopBroadcast();
+    }
+}
+```
