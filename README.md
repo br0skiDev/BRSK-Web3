@@ -108,3 +108,5 @@ contract Deploy is Script {
 Hier den Presale testen [BRSK-Token][1].
 
 [1]: https://www.brsk-token.com/
+
+![WEBSITE-SCREENSHOT](./public/assets/site-screenshot.png)
