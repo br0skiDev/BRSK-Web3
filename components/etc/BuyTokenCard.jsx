@@ -216,9 +216,9 @@ export const BuyTokenCard = () => {
                 <div className="fixed inset-0 flex items-center justify-center">
                     <div className="p-4 rounded-lg shadow-lg bg-gray-800/90 border border-slate-50/10 drop-shadow-xl px-3 py-4 backdrop-blur-md">
                         <h2 className="text-xl font-bold mb-2 text-slate-50">Transaction Successful</h2>
-                        <p className="mb-2 text-slate-50">You bought BRSK for {purchaseInfo.amount} ETH</p>
-                        <p className="mb-2 text-slate-50 text-xs">Thank you for your purchase!</p>
-                        <p className="mb-2 text-slate-50/40 text-xs select-all">Transaction Hash: <span className='text-slate-50 font-bold'>{purchaseInfo.hash}</span></p>
+                        <p className="mb-2 text-slate-50 select-none">You bought BRSK for {purchaseInfo.amount} ETH</p>
+                        <p className="mb-2 text-slate-50 text-xs select-none">Thank you for your purchase!</p>
+                        <p className="mb-2 text-slate-50/40 text-xs select-none">Transaction Hash: <span className='text-slate-50 font-bold select-all'>{purchaseInfo.hash}</span></p>
 
                         <button
                             onClick={closePopup}

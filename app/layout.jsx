@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
         <body className={inter.className}>
             <main className="flex-grow">
-                <div className="absolute w-full h-full left-0 top-0 flex items-center justify-center">
+                <div className="absolute w-full h-full left-0 top-0 flex items-center justify-center select-none">
                     <h1 className="text-[140pt] font-black opacity-50 shadow-xl px-10 tracking-tighter">BROSKI</h1>
                 </div>
                 {children}
