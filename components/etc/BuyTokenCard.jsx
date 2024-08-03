@@ -161,9 +161,7 @@ useEffect(() => {
     return (
         <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
             <div className='flex h-[82px] w-fit'>
-                <div className='mr-2 z-20 flex'>
-                    <Image src="/assets/logo.png" alt='Logo' width={82} height={82} className='border-2 border-slate-700/70 rounded-full' />
-                </div>
+
                 <div className='z-20 flex h-full flex-col justify-center'>
                     <h1 className='text-white text-3xl font-bold tracking-tight'>BUY <span className='text-black font-black text-4xl tracking-tighter shadow-md'>BRSK!💨</span></h1>
                     <h2 className='text-white text-md font-light tracking-wider'>NOW! ✨</h2>
@@ -202,7 +200,7 @@ useEffect(() => {
                     <Image src="/assets/logo.png" alt='BRSK' width={60} height={60} className='flex border-2 border-gray-600 rounded-full' />
                 </div>
                 <div className='flex justify-center items-center'>
-                    <FaExchangeAlt className='text-slate-50 text-5xl rounded-lg bg-slate-800/20 backdrop-blur-md p-3' />
+                    <FaExchangeAlt className='text-slate-50 text-5xl rounded-full bg-slate-600/10 backdrop-blur-md p-3' />
                 </div>
                 <div className='flex justify-center items-center'>
                     <Image src="/assets/eth.png" alt='ETH' width={60} height={60} className='flex border-2 border-gray-600 rounded-full' />

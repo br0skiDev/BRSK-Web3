@@ -6,8 +6,8 @@ import { TopBar } from "@/components/etc/TopBar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "BRSK",
-  description: "Buy BRSK now!",
+  title: "BRSK Presale",
+  description: "BRSK Presale - Buy the Token now!",
 };
 
 export default function RootLayout({ children }) {
