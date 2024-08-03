@@ -19,6 +19,7 @@ export const BuyTokenCard = () => {
     const [transactionHash, setTransactionHash] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
     const [purchaseInfo, setPurchaseInfo] = useState({ hash: '', amount: '' });
+    const [isBuying, setIsBuying] = useState(false);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -77,18 +78,23 @@ export const BuyTokenCard = () => {
         }
 
         try {
+            setIsBuying(true);
             const amountInETH = priceValue;
             const amountInWei = ethers.parseEther(amountInETH);
             console.log("Amount in Wei:", amountInWei.toString());
 
+            const brskAmount = inputValue;
+
             const tx = await presaleContract.buyTokens({ value: amountInWei });
             setTransactionHash(tx.hash);
             await tx.wait();
+            setPurchaseInfo({ hash: tx.hash, amount: amountInETH, brskAmount: brskAmount });
             setInputValue('');
-            setPurchaseInfo({ hash: tx.hash, amount: amountInETH });
             setShowPopup(true);
         } catch (error) {
             console.error("Error buying tokens:", error);
+        } finally {
+            setIsBuying(false);
         }
     };
 
@@ -215,9 +221,9 @@ export const BuyTokenCard = () => {
             {showPopup && (
                 <div className="fixed inset-0 flex items-center justify-center">
                     <div className="p-4 rounded-lg shadow-lg bg-gray-800/90 border border-slate-50/10 drop-shadow-xl px-3 py-4 backdrop-blur-md">
-                        <h2 className="text-xl font-bold mb-2 text-slate-50">Transaction Successful</h2>
-                        <p className="mb-2 text-slate-50 select-none">You bought BRSK for {purchaseInfo.amount} ETH</p>
-                        <p className="mb-2 text-slate-50 text-xs select-none">Thank you for your purchase!</p>
+                        <h2 className="text-xl font-bold mb-2 text-slate-50 select-none">Transaction Successful ✨</h2>
+                        <p className="mb-2 select-none text-green-500">You bought <span className='font-bold'>{purchaseInfo.brskAmount} BRSK</span> for <span className='font-bold'>{purchaseInfo.amount} ETH</span></p>
+                        <p className="mb-2 text-slate-50 text-xs select-none">Thank you for your purchase! ❤️</p>
                         <p className="mb-2 text-slate-50/40 text-xs select-none">Transaction Hash: <span className='text-slate-50 font-bold select-all'>{purchaseInfo.hash}</span></p>
 
                         <button
@@ -229,6 +235,15 @@ export const BuyTokenCard = () => {
                     </div>
                 </div>
             )}
+
+            {isBuying && (
+                <div className='absolute top-0 left-0 flex w-full h-full justify-center items-center z-50 bg-black/90 rounded-md backdrop-blur-xl flex-col'>
+                    <Image src={"/assets/logo.png"} alt='LOGO' width={125} height={125} />
+                    <h1 className='mt-4 text-slate-50/20 text-[9.4pt]'><span className='text-red-500 font-semibold text-[11pt]'>TRANSACTION IN PROGRESS</span><br/>Please wait.</h1>
+                    <p></p>
+                </div>
+            )}
+
         </div>
     );
 };
