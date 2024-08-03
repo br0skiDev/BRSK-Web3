@@ -23,8 +23,8 @@ export const BuyTokenCard = () => {
 
     useEffect(() => {
         if (inputValue && RATE > 0) {
-            const priceInETH = (inputValue / RATE).toFixed(6);
-            setPriceValue(priceInETH);
+            const priceInETH = inputValue / RATE;
+            setPriceValue(priceInETH.toString());
         } else {
             setPriceValue('Choose BRSK amount');
         }
@@ -86,10 +86,10 @@ export const BuyTokenCard = () => {
             // Execute transaction
             const tx = await presaleContract.buyTokens({ value: amountInWei });
             await tx.wait();
+            setInputValue('')
             alert("Transaction successful");
         } catch (error) {
             console.error("Error buying tokens:", error);
-            alert("Error buying tokens: " + error.message);
         }
     };
 
