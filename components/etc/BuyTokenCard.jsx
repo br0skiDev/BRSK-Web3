@@ -165,8 +165,8 @@ useEffect(() => {
                     <Image src="/assets/logo.png" alt='Logo' width={82} height={82} className='border-2 border-slate-700/70 rounded-full' />
                 </div>
                 <div className='z-20 flex h-full flex-col justify-center'>
-                    <h1 className='text-white text-3xl font-bold tracking-tight'>BUY <span className='text-black font-black text-4xl tracking-tighter shadow-md'>BRSK!</span></h1>
-                    <h2 className='text-white text-md font-light tracking-wider'>NOW!</h2>
+                    <h1 className='text-white text-3xl font-bold tracking-tight'>BUY <span className='text-black font-black text-4xl tracking-tighter shadow-md'>BRSK!💨</span></h1>
+                    <h2 className='text-white text-md font-light tracking-wider'>NOW! ✨</h2>
                 </div>
             </div>
 
@@ -239,7 +239,7 @@ useEffect(() => {
                     onClick={buyTokens}
                     className='flex items-center justify-center gap-1 w-full py-2 border-2 border-slate-950/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-red-700 hover:bg-red-600 hover:border-slate-50 hover:text-slate-50'
                 >
-                    <Coins />
+                    <Coins size={40}/>
                     BUY TOKEN
                 </button>
 
