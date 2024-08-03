@@ -1,13 +1,13 @@
-## Token Contract
+## Token Contract Address
 ```shell
 0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60
 ```
-## Presale Contract
+## Presale Contract Address
 ```shell
 0x1982262c44852d7CF18f7c3D32DdeeB356013d87
 ```
 
-## Token Source
+## Token Contract Source
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
@@ -21,7 +21,7 @@ contract BRSK is ERC20 {
 }
 ```
 
-## Presale Source
+## Presale Contract Source
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
