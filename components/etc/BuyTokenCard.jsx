@@ -141,23 +141,23 @@ export const BuyTokenCard = () => {
                 <h1 className='text-xs text-slate-50 font-semibold z-20 flex'><CornerLeftDown className='w-[20px]' /> <span className='underline-offset-[6px] underline'>Connect your wallet and buy!</span></h1>
             </div>
 
-            <div className='w-full flex flex-col mt-1'>
+            <div className='w-full flex flex-col mt-1 py-2'>
                 <h1 className='flex items-center gap-1 text-white font-extralight text-xs'><Wallet className='w-[12px]'/>Wallet connected: </h1>
                 <p className={`${connectedAddress ? "text-green-500 font-bold text-[6.8pt] select-all" : "text-red-500 font-bold text-[10.5pt]"}`}>
                     {connectedAddress ? String(connectedAddress.address) : "No wallet connected..."}
                 </p>
                 {connectedAddress ? (
-                    <div className='w-full flex justify-center items-center'>
-                        <button onClick={disconnectWallet} className='px-2 py-[1px] rounded-full bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Disconnect Wallet</button>
+                    <div className='w-full flex justify-center items-center mt-1'>
+                        <button onClick={disconnectWallet} className='px-2 py-[1px] rounded-sm bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Disconnect Wallet</button>
                     </div>
                 ) : (
-                    <div className='w-full flex justify-center items-center'>
-                        <button onClick={connectWallet} className='px-2 py-[1px] rounded-full bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Connect Wallet</button>
+                    <div className='w-full flex justify-center items-center mt-1'>
+                        <button onClick={connectWallet} className='px-2 py-[1px] rounded-sm bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Connect Wallet</button>
                     </div>
                 )}
             </div>
 
-            <div className='mt-2 w-full bg-gray-50/10 flex justify-center py-3 rounded-sm flex-col items-center'>
+            <div className='mt-2 w-full bg-gray-50/10 flex justify-center py-3 rounded-sm flex-col items-center rounded-t-lg'>
                 <p className='text-md text-slate-50 text-xs font-light'>
                     Buy BRSK with SepoliaETH
                 </p>
@@ -169,7 +169,7 @@ export const BuyTokenCard = () => {
                     <Image src="/assets/logo.png" alt='BRSK' width={60} height={60} className='flex border-2 border-gray-600 rounded-full' />
                 </div>
                 <div className='flex justify-center items-center'>
-                    <FaExchangeAlt className='text-slate-50 text-2xl' />
+                    <FaExchangeAlt className='text-slate-50 text-5xl rounded-lg bg-slate-800/20 backdrop-blur-md p-3' />
                 </div>
                 <div className='flex justify-center items-center'>
                     <Image src="/assets/eth.png" alt='ETH' width={60} height={60} className='flex border-2 border-gray-600 rounded-full' />
