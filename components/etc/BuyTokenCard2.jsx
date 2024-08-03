@@ -3,7 +3,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { ethers } from 'ethers';
-import { presaleABI } from '@/lib/presaleABI'; // Stelle sicher, dass das ABI korrekt ist
+import { presaleABI } from '@/lib/presaleABI';
 
 const TOKEN_ADDRESS = "0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60"; // Neue Token-Adresse
 const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87"; // Neue Presale-Adresse
