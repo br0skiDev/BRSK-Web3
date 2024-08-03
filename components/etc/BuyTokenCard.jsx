@@ -126,13 +126,13 @@ export const BuyTokenCard = () => {
     };
 
     return (
-        <div className='rounded-md h-fit w-[268px] flex flex-col bg-gray-800/70 border border-slate-50/10 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
+        <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
             <div className='flex h-[82px] w-fit'>
                 <div className='mr-2 z-20 flex'>
                     <Image src="/assets/logo.png" alt='Logo' width={82} height={82} className='border-2 border-slate-700/70 rounded-full' />
                 </div>
                 <div className='z-20 flex h-full flex-col justify-center'>
-                    <h1 className='text-white text-2xl font-bold tracking-tight'>BUY BRSK</h1>
+                    <h1 className='text-white text-3xl font-bold tracking-tight'>BUY <span className='text-black font-black text-4xl tracking-tighter shadow-md'>BRSK!</span></h1>
                     <h2 className='text-white text-md font-light tracking-wider'>NOW!</h2>
                 </div>
             </div>
@@ -204,19 +204,19 @@ export const BuyTokenCard = () => {
                 <button
                     type="button"
                     onClick={buyTokens}
-                    className='flex items-center justify-center gap-1 w-full py-2 border-2 border-gray-500 rounded-lg mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-gray-900 hover:bg-opacity-50 hover:border-slate-50'
+                    className='flex items-center justify-center gap-1 w-full py-2 border-2 border-red-600/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-red-600 hover:bg-red-800 hover:border-red-900 drop-shadow-md'
                 >
                     <Coins />
-                    BUY TOKENS
+                    BUY TOKEN
                 </button>
 
                 {connectedAddress && (
                     <button
                         type="button"
                         onClick={claimTokens}
-                        className='w-full py-2 border-2 border-slate-50 rounded-lg mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-gray-900 hover:bg-opacity-50'
+                        className='w-full py-2 border-2 border-green-200/70 rounded-lg mt-3 font-thin tracking-tighter text-2xl text-slate-50 bg-gray-900 hover:border-blue-200 drop-shadow-md'
                     >
-                        CLAIM TOKENS
+                        CLAIM TOKEN
                     </button>
                 )}
             </form>
