@@ -9,6 +9,8 @@ import { Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-react';
 const TOKEN_ADDRESS = "0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60";
 const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87";
 const RATE = 100;
+const DEPLOYMENT_TIME = new Date("Aug 03, 2024 05:49:12 UTC");
+const PRESALE_DURATION = 24 * 60 * 60 * 1000;
 
 export const BuyTokenCard = () => {
     const [inputValue, setInputValue] = useState('');
@@ -21,6 +23,7 @@ export const BuyTokenCard = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [purchaseInfo, setPurchaseInfo] = useState({ hash: '', amount: '' });
     const [isBuying, setIsBuying] = useState(false);
+    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -125,6 +128,36 @@ export const BuyTokenCard = () => {
         setShowPopup(false);
     };
 
+useEffect(() => {
+    const updateTimer = () => {
+        const time = calculateTimeLeft();
+        setTimeLeft(time);
+    };
+
+    updateTimer(); // Initial call to set the timer right away
+    const intervalId = setInterval(updateTimer, 60000); // Update every minute
+
+    return () => clearInterval(intervalId);
+}, []);
+
+
+
+    const calculateTimeLeft = () => {
+        const now = new Date();
+        const endTime = new Date(DEPLOYMENT_TIME.getTime() + PRESALE_DURATION);
+        const timeLeft = endTime - now;
+
+        if (timeLeft <= 0) {
+            return { hours: 0, minutes: 0 };
+        } else {
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            return { hours, minutes };
+        }
+    };
+
+
     return (
         <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
             <div className='flex h-[82px] w-fit'>
@@ -204,7 +237,7 @@ export const BuyTokenCard = () => {
                 <button
                     type="button"
                     onClick={buyTokens}
-                    className='flex items-center justify-center gap-1 w-full py-2 border-2 border-red-600/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-red-600 hover:bg-red-800 hover:border-red-900 drop-shadow-md'
+                    className='flex items-center justify-center gap-1 w-full py-2 border-2 border-slate-950/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-red-700 hover:bg-red-600 hover:border-slate-50 hover:text-slate-50'
                 >
                     <Coins />
                     BUY TOKEN
@@ -214,7 +247,7 @@ export const BuyTokenCard = () => {
                     <button
                         type="button"
                         onClick={claimTokens}
-                        className='w-full py-2 border-2 border-green-200/70 rounded-lg mt-3 font-thin tracking-tighter text-2xl text-slate-50 bg-gray-900 hover:border-blue-200 drop-shadow-md'
+                        className='w-fit self-center px-4 py-2 border-2 border-green-500 rounded-lg mt-3 font-thin tracking-tighter text-md text-slate-50 bg-gray-900 hover:border-blue-200'
                     >
                         CLAIM TOKEN
                     </button>
@@ -247,6 +280,7 @@ export const BuyTokenCard = () => {
                 </div>
             )}
 
+            <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>Presale ends in {timeLeft.hours}h {timeLeft.minutes}m.</div>
         </div>
     );
 };
