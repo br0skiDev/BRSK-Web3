@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
+import { Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-react';
 
 const TOKEN_ADDRESS = "0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60";
 const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87";
@@ -128,20 +129,20 @@ export const BuyTokenCard = () => {
         <div className='rounded-md h-fit w-[268px] flex flex-col bg-gray-800/70 border border-slate-50/10 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
             <div className='flex h-[82px] w-fit'>
                 <div className='mr-2 z-20 flex'>
-                    <Image src="/assets/logo.png" alt='Logo' width={82} height={82} className='border-2 border-violet-50/70 rounded-full' />
+                    <Image src="/assets/logo.png" alt='Logo' width={82} height={82} className='border-2 border-slate-700/70 rounded-full' />
                 </div>
                 <div className='z-20 flex h-full flex-col justify-center'>
-                    <h1 className='text-white text-2xl font-black tracking-tight'>Buy BRSK</h1>
-                    <h2 className='text-white text-xl font-light tracking-wider'>now!</h2>
+                    <h1 className='text-white text-2xl font-bold tracking-tight'>BUY BRSK</h1>
+                    <h2 className='text-white text-md font-light tracking-wider'>NOW!</h2>
                 </div>
             </div>
 
-            <div className="w-full bg-gray-900 rounded-lg p-2">
-                <h1 className='text-xs text-slate-50 font-semibold z-20'>Get your Token!</h1>
+            <div className="flex justify-center w-full bg-gray-900 rounded-lg py-2">
+                <h1 className='text-xs text-slate-50 font-semibold z-20 flex'><CornerLeftDown className='w-[20px]' /> <span className='underline-offset-[6px] underline'>Connect your wallet and buy!</span></h1>
             </div>
 
-            <div className='w-full flex flex-col mt-2'>
-                <h1 className='text-white font-extralight text-xs'>Wallet connected: </h1>
+            <div className='w-full flex flex-col mt-1'>
+                <h1 className='flex items-center gap-1 text-white font-extralight text-xs'><Wallet className='w-[12px]'/>Wallet connected: </h1>
                 <p className={`${connectedAddress ? "text-green-500 font-bold text-[6.8pt] select-all" : "text-red-500 font-bold text-[10.5pt]"}`}>
                     {connectedAddress ? String(connectedAddress.address) : "No wallet connected..."}
                 </p>
@@ -156,28 +157,29 @@ export const BuyTokenCard = () => {
                 )}
             </div>
 
-            <div className='mt-2 w-full bg-gray-50/10 flex justify-center py-3 rounded-sm'>
-                <p className='text-md text-slate-100'>
+            <div className='mt-2 w-full bg-gray-50/10 flex justify-center py-3 rounded-sm flex-col items-center'>
+                <p className='text-md text-slate-50 text-xs font-light'>
                     Buy BRSK with SepoliaETH
                 </p>
+                <p className='text-xl tracking-tighter text-slate-50 font-bold'>100 BRSK = 1 ETH</p>
             </div>
 
             <div className='w-full grid grid-cols-3 mt-2 py-4 px-8 bg-slate-50/10 rounded'>
                 <div className='flex justify-center items-center'>
-                    <Image src="/assets/logo.png" alt='BRSK' width={48} height={48} className='flex border-2 border-slate-300 rounded-full' />
+                    <Image src="/assets/logo.png" alt='BRSK' width={60} height={60} className='flex border-2 border-gray-600 rounded-full' />
                 </div>
                 <div className='flex justify-center items-center'>
-                    <FaExchangeAlt className='text-slate-50 text-3xl' />
+                    <FaExchangeAlt className='text-slate-50 text-2xl' />
                 </div>
                 <div className='flex justify-center items-center'>
-                    <Image src="/assets/eth.png" alt='ETH' width={48} height={48} className='flex border-2 border-slate-300 rounded-full' />
+                    <Image src="/assets/eth.png" alt='ETH' width={60} height={60} className='flex border-2 border-gray-600 rounded-full' />
                 </div>
             </div>
 
             <form className='w-full h-fit flex flex-col mt-2'>
                 <div className='grid grid-cols-1 gap-2'>
                     <div className='flex justify-between items-center'>
-                        <h1 className='text-slate-50 font-semibold underline-offset-4 underline'>BRSK</h1>
+                        <h1 className='text-slate-50 font-semibold underline-offset-4'>BRSK</h1>
                         <input
                             id="brsk_input"
                             type="number"
@@ -188,7 +190,7 @@ export const BuyTokenCard = () => {
                     </div>
 
                     <div className='flex justify-between items-center'>
-                        <h1 className='text-slate-50 font-semibold underline-offset-4 underline'>Sepolia</h1>
+                        <h1 className='text-slate-50 font-semibold underline-offset-4'>ETH</h1>
                         <input
                             id="price_input"
                             type="text"
@@ -202,9 +204,10 @@ export const BuyTokenCard = () => {
                 <button
                     type="button"
                     onClick={buyTokens}
-                    className='w-full py-2 border-2 border-slate-50 rounded-lg mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-gray-900 hover:bg-opacity-50'
+                    className='flex items-center justify-center gap-1 w-full py-2 border-2 border-gray-500 rounded-lg mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-gray-900 hover:bg-opacity-50 hover:border-slate-50'
                 >
-                    BUY
+                    <Coins />
+                    BUY TOKENS
                 </button>
 
                 {connectedAddress && (
