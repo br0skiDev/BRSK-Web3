@@ -1,13 +1,13 @@
-"use client";
+"use client"
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
 
-const TOKEN_ADDRESS = "0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60"; // Neue Token-Adresse
-const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87"; // Neue Presale-Adresse
-const RATE = 100; // 1 ETH = 100 BRSK
+const TOKEN_ADDRESS = "0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60";
+const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87";
+const RATE = 100;
 
 export const BuyTokenCard = () => {
     const [inputValue, setInputValue] = useState('');
@@ -16,6 +16,9 @@ export const BuyTokenCard = () => {
     const [provider, setProvider] = useState(null);
     const [signer, setSigner] = useState(null);
     const [presaleContract, setPresaleContract] = useState(null);
+    const [transactionHash, setTransactionHash] = useState(null);
+    const [showPopup, setShowPopup] = useState(false);
+    const [purchaseInfo, setPurchaseInfo] = useState({ hash: '', amount: '' });
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -45,13 +48,8 @@ export const BuyTokenCard = () => {
                     setConnectedAddress(null);
                 }
 
-                // Initializing the Presale Contract
                 const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
                 setPresaleContract(_presaleContract);
-
-                // Debugging: Log Contract Methods
-                console.log("Presale Contract:", _presaleContract);
-                console.log("Presale Contract Methods:", Object.keys(_presaleContract.interface.functions));
             } catch (error) {
                 console.error("Error connecting to wallet:", error);
             }
@@ -83,11 +81,12 @@ export const BuyTokenCard = () => {
             const amountInWei = ethers.parseEther(amountInETH);
             console.log("Amount in Wei:", amountInWei.toString());
 
-            // Execute transaction
             const tx = await presaleContract.buyTokens({ value: amountInWei });
+            setTransactionHash(tx.hash);
             await tx.wait();
-            setInputValue('')
-            alert("Transaction successful");
+            setInputValue('');
+            setPurchaseInfo({ hash: tx.hash, amount: amountInETH });
+            setShowPopup(true);
         } catch (error) {
             console.error("Error buying tokens:", error);
         }
@@ -100,17 +99,11 @@ export const BuyTokenCard = () => {
         }
 
         try {
-            // Call the claimTokens function on the contract
             const tx = await presaleContract.claimTokens();
-
-            // Wait for the transaction to be mined
             await tx.wait();
-
             alert("Tokens claimed successfully");
         } catch (error) {
             console.error("Error claiming tokens:", error);
-
-            // Provide more specific error messages based on the contract's requirements
             if (error.message.includes("Presale not ended")) {
                 alert("The presale has not ended yet. Please wait until the presale period is over to claim your tokens.");
             } else if (error.message.includes("No tokens to claim")) {
@@ -119,6 +112,10 @@ export const BuyTokenCard = () => {
                 alert("Error claiming tokens: " + error.message);
             }
         }
+    };
+
+    const closePopup = () => {
+        setShowPopup(false);
     };
 
     return (
@@ -214,6 +211,24 @@ export const BuyTokenCard = () => {
                     </button>
                 )}
             </form>
+
+            {showPopup && (
+                <div className="fixed inset-0 flex items-center justify-center">
+                    <div className="p-4 rounded-lg shadow-lg bg-gray-800/90 border border-slate-50/10 drop-shadow-xl px-3 py-4 backdrop-blur-md">
+                        <h2 className="text-xl font-bold mb-2 text-slate-50">Transaction Successful</h2>
+                        <p className="mb-2 text-slate-50">You bought BRSK for {purchaseInfo.amount} ETH</p>
+                        <p className="mb-2 text-slate-50 text-xs">Thank you for your purchase!</p>
+                        <p className="mb-2 text-slate-50/40 text-xs select-all">Transaction Hash: <span className='text-slate-50 font-bold'>{purchaseInfo.hash}</span></p>
+
+                        <button
+                            onClick={closePopup}
+                            className="mt-2 px-4 py-2 bg-slate-500 text-white rounded w-full hover:brightness-75"
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
