@@ -180,11 +180,11 @@ useEffect(() => {
                     {connectedAddress ? String(connectedAddress.address) : "No wallet connected..."}
                 </p>
                 {connectedAddress ? (
-                    <div className='w-full flex justify-center items-center mt-1'>
+                    <div className='w-full flex justify-start items-center mt-1'>
                         <button onClick={disconnectWallet} className='px-2 py-[1px] rounded-sm bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Disconnect Wallet</button>
                     </div>
                 ) : (
-                    <div className='w-full flex justify-center items-center mt-1'>
+                    <div className='w-full flex justify-start items-center mt-1'>
                         <button onClick={connectWallet} className='px-2 py-[1px] rounded-sm bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Connect Wallet</button>
                     </div>
                 )}
@@ -280,7 +280,7 @@ useEffect(() => {
                 </div>
             )}
 
-            <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>Presale ends in {timeLeft.hours}h {timeLeft.minutes}m.</div>
+            <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>⏰ Presale ends in {timeLeft.hours}h {timeLeft.minutes}m.</div>
         </div>
     );
 };
