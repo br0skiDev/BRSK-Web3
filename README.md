@@ -7,7 +7,7 @@
 0x1982262c44852d7CF18f7c3D32DdeeB356013d87
 ```
 
-## Token Contract Source
+## Token Source
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
@@ -21,7 +21,7 @@ contract BRSK is ERC20 {
 }
 ```
 
-## Presale Contract Source
+## Presale Source
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.26;
