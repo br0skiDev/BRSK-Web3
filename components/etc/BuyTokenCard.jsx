@@ -14,7 +14,7 @@ const PRESALE_DURATION = 24 * 60 * 60 * 1000;
 
 export const BuyTokenCard = () => {
     const [inputValue, setInputValue] = useState('');
-    const [priceValue, setPriceValue] = useState('Choose BRSK amount');
+    const [priceValue, setPriceValue] = useState('---');
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
     const [signer, setSigner] = useState(null);
@@ -34,7 +34,7 @@ export const BuyTokenCard = () => {
             const priceInETH = inputValue / RATE;
             setPriceValue(priceInETH.toString());
         } else {
-            setPriceValue('Choose BRSK amount');
+            setPriceValue('---');
         }
     }, [inputValue]);
 
@@ -192,7 +192,7 @@ useEffect(() => {
 
             <div className='mt-2 w-full bg-gray-50/10 flex justify-center py-3 rounded-sm flex-col items-center rounded-t-lg'>
                 <p className='text-md text-slate-50 text-xs font-light'>
-                    Buy BRSK with SepoliaETH
+                    Buy BRSK with ETH
                 </p>
                 <p className='text-xl tracking-tighter text-slate-50 font-bold'>100 BRSK = 1 ETH</p>
             </div>
