@@ -119,7 +119,7 @@ export const BuyTokenCard = () => {
             } else if (error.message.includes("No tokens to claim")) {
                 alert("You don't have any tokens to claim. Make sure you participated in the presale.");
             } else {
-                alert("Error claiming tokens: " + error.message);
+                console.log("Error claiming tokens: " + error.message);
             }
         } finally {
             setIsBuying(false);
