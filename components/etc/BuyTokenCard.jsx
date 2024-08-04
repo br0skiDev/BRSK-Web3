@@ -6,8 +6,8 @@ import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
 import { Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-react';
 
-const TOKEN_ADDRESS = "0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60";
-const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87";
+const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS;
+const PRESALE_ADDRESS = process.env.PRESALE_ADDRESS;
 const RATE = 100;
 const DEPLOYMENT_TIME = new Date("Aug 03, 2024 05:49:12 UTC");
 const PRESALE_DURATION = 24 * 60 * 60 * 1000;
@@ -113,7 +113,7 @@ export const BuyTokenCard = () => {
             setIsBuying(false);
             alert("Tokens claimed successfully");
         } catch (error) {
-            console.error("Error claiming tokens:", error);
+            console.log("Error claiming tokens:", error);
             if (error.message.includes("Presale not ended")) {
                 alert("The presale has not ended yet. Please wait until the presale period is over to claim your tokens.");
             } else if (error.message.includes("No tokens to claim")) {

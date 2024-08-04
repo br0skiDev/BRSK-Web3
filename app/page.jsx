@@ -24,10 +24,10 @@ export default function Home() {
             <h1 className="font-bold text-md text-emerald-300">SepoliaETH</h1>
         </div>
             <div className="w-fit h-fit select-none p-2 rounded-lg backdrop-blur-lg drop-shadow-xl text-xs font-light text-emerald-100">
-                Token Contract: <span className="select-all font-black text-emerald-250 text-[10.5pt] ml-2">0x529bBdF560b5b3F5467b47F1B86E9805e4bC1e60</span>
+                Token Contract: <span className="select-all font-black text-emerald-250 text-[10.5pt] ml-2">{process.env.TOKEN_ADDRESS}</span>
             </div>
             <div className="w-fit h-fit select-none p-2 rounded-lg backdrop-blur-lg drop-shadow-xl text-xs font-light text-emerald-100">
-                Presale Contract: <span className="select-all font-black text-emerald-250 text-[10.5pt] ml-2">0x1982262c44852d7CF18f7c3D32DdeeB356013d87</span>
+                Presale Contract: <span className="select-all font-black text-emerald-250 text-[10.5pt] ml-2">{process.env.PRESALE_ADDRESS}</span>
             </div>
         </div>
     </div>
