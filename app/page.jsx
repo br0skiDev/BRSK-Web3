@@ -11,7 +11,7 @@ export default function Home() {
 
         <div className='absolute bottom-[30px] right-[45px]'>
             <Link href={"/balance"}>
-                <div className='py-[5px] px-[12px] rounded-full border-[0px] shadow-xl text-slate-50 hover:border-slate-200 hover:border-2 flex gap-2'>
+                <div className='py-[5px] px-[12px] rounded-full border-[0px] shadow-xl text-slate-50 hover:border-slate-200/50 hover:border-2 flex gap-2'>
                     See Balance <ArrowRight className='w-[15px]' />
                 </div>
             </Link>
