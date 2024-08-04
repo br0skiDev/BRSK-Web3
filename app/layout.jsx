@@ -1,7 +1,6 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./more.css";
-import { TopBar } from "@/components/etc/TopBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
