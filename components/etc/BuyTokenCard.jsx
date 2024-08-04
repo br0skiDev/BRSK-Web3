@@ -218,7 +218,7 @@ useEffect(() => {
                             type="number"
                             value={inputValue}
                             onChange={handleInputChange}
-                            className='rounded focus:ring-0 focus:outline-none text-xs w-[175px] p-2'
+                            className='rounded focus:ring-0 focus:outline-none text-xs w-[240px] p-2'
                         />
                     </div>
 
@@ -228,7 +228,7 @@ useEffect(() => {
                             id="price_input"
                             type="text"
                             value={priceValue}
-                            className='rounded focus:ring-0 focus:outline-none text-xs w-[175px] p-2'
+                            className='rounded focus:ring-0 focus:outline-none text-xs w-[240px] p-2'
                             readOnly
                         />
                     </div>
