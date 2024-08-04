@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
 import { Wallet, DollarSign } from 'lucide-react';
 
-const PRESALE_ADDRESS = "0x1982262c44852d7CF18f7c3D32DdeeB356013d87";
+const PRESALE_ADDRESS = process.env(PRESALE_ADDRESS);
 
 export const WithdrawCard = () => {
     const [connectedAddress, setConnectedAddress] = useState(null);
