@@ -100,7 +100,7 @@ export const WithdrawCard = () => {
                 </div>
                 <div className='z-20 flex h-full flex-col justify-center'>
                     <h1 className='text-white text-3xl font-bold tracking-tight'>PRESALE</h1>
-                    <h2 className='text-white text-md font-light tracking-wider'>BALANCE</h2>
+                    <h2 className='text-white text-md font-light tracking-wider'>BALANCE💰</h2>
                 </div>
             </div>
 
