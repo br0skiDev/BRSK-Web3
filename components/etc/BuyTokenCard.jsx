@@ -121,6 +121,8 @@ export const BuyTokenCard = () => {
             } else {
                 alert("Error claiming tokens: " + error.message);
             }
+        } finally {
+            setIsBuying(false);
         }
     };
 
@@ -134,8 +136,8 @@ useEffect(() => {
         setTimeLeft(time);
     };
 
-    updateTimer(); // Initial call to set the timer right away
-    const intervalId = setInterval(updateTimer, 60000); // Update every minute
+    updateTimer();
+    const intervalId = setInterval(updateTimer, 60000);
 
     return () => clearInterval(intervalId);
 }, []);
