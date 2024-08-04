@@ -1,11 +1,22 @@
 import { BuyTokenCard } from "@/components/etc/BuyTokenCard";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 
 export default function Home() {
 
   return (
     <div className="flex items-center justify-center w-full h-full">
+
+        <div className='absolute bottom-[30px] right-[45px]'>
+            <Link href={"/balance"}>
+                <div className='py-[5px] px-[12px] rounded-full border-[0px] shadow-xl text-slate-50 hover:border-slate-200 hover:border-2 flex gap-2'>
+                    See Balance <ArrowRight className='w-[15px]' />
+                </div>
+            </Link>
+        </div>
+
         <BuyTokenCard />
         <div className="absolute left-2 bottom-2 flex flex-col text-slate-950">
         <div className="flex gap-2 items-center">
