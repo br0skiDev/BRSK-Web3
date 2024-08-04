@@ -288,8 +288,8 @@ useEffect(() => {
                 </div>
             ) : (
                 <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300 flex-col'>
-                    <h1>❌ Presale has ended. You can&apos;t buy anymore.</h1>
-                    <span className='flex items-center gap-1 text-[10px]'>You can claim your <Image src={"/assets/logo.png"} alt='' width={25} height={25} /> BRSK Token now!</span>
+                    <h1 className='text-red-500 font-light'>❌ Presale has ended. You can&apos;t buy anymore.</h1>
+                    <span className='flex items-center gap-1 text-[10px]'>But you can claim your <Image src={"/assets/logo.png"} alt='' width={25} height={25} /> BRSK Token now!</span>
                 </div>
             )}
         </div>
