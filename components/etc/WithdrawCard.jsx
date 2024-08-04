@@ -36,7 +36,7 @@ export const WithdrawCard = () => {
 
                 const _ownerAddress = await _presaleContract.owner();
                 setOwnerAddress(_ownerAddress);
-                console.log("Owner : " + ownerAddress.address)
+                console.log("Owner : " + _ownerAddress);
 
             } catch (error) {
                 console.error("Error connecting to wallet:", error);
@@ -81,7 +81,6 @@ export const WithdrawCard = () => {
             fetchBalance();
         } catch (error) {
             console.error("Error withdrawing funds:", error);
-            alert("Error withdrawing funds: " + error.message);
         } finally {
             setIsWithdrawing(false);
         }
@@ -132,7 +131,7 @@ export const WithdrawCard = () => {
                 <p className='text-xl tracking-tighter text-slate-50 font-bold'>{balance !== null ? `${balance} ETH` : 'connect wallet first'}</p>
             </div>
 
-            {connectedAddress && connectedAddress === ownerAddress && (
+            {connectedAddress && ownerAddress && connectedAddress.address.toLowerCase() === ownerAddress.toLowerCase() && (
                 <button
                     type="button"
                     onClick={withdrawFunds}
