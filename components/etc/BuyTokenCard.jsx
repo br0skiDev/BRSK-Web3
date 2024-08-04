@@ -6,8 +6,8 @@ import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
 import { Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-react';
 
-const TOKEN_ADDRESS = process.env.TOKEN_ADDRESS;
-const PRESALE_ADDRESS = process.env.PRESALE_ADDRESS;
+const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
+const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
 const RATE = 100;
 const DEPLOYMENT_TIME = new Date("Aug 03, 2024 05:49:12 UTC");
 const PRESALE_DURATION = 24 * 60 * 60 * 1000;
