@@ -3,7 +3,7 @@ import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import React from 'react'
 
-const page = () => {
+const BalancePage = () => {
   return (
     <div className='w-full h-full flex justify-center items-center'>
         <div className='absolute bottom-[30px] left-[45px]'>
@@ -18,4 +18,4 @@ const page = () => {
   )
 }
 
-export default page
+export default BalancePage
