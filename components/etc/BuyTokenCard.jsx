@@ -85,8 +85,6 @@ export const BuyTokenCard = () => {
             setIsBuying(true);
             const amountInETH = priceValue;
             const amountInWei = ethers.parseEther(amountInETH);
-            console.log("Amount in Wei:", amountInWei.toString());
-
             const brskAmount = inputValue;
 
             const tx = await presaleContract.buyTokens({ value: amountInWei });
@@ -218,7 +216,7 @@ useEffect(() => {
                             type="number"
                             value={inputValue}
                             onChange={handleInputChange}
-                            className='rounded focus:ring-0 focus:outline-none text-xs w-[240px] p-2'
+                            className='rounded-none focus:ring-0 focus:outline-none text-xs w-[240px] p-2'
                         />
                     </div>
 
@@ -228,7 +226,7 @@ useEffect(() => {
                             id="price_input"
                             type="text"
                             value={priceValue}
-                            className='rounded focus:ring-0 focus:outline-none text-xs w-[240px] p-2'
+                            className='rounded-none focus:ring-0 focus:outline-none text-xs w-[240px] p-2'
                             readOnly
                         />
                     </div>
