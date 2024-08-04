@@ -107,8 +107,10 @@ export const BuyTokenCard = () => {
         }
 
         try {
+            setIsBuying(true);
             const tx = await presaleContract.claimTokens();
             await tx.wait();
+            setIsBuying(false);
             alert("Tokens claimed successfully");
         } catch (error) {
             console.error("Error claiming tokens:", error);
