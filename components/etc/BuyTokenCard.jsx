@@ -14,6 +14,7 @@ const PRESALE_DURATION = 24 * 60 * 60 * 1000;
 
 export const BuyTokenCard = () => {
     const [inputValue, setInputValue] = useState('');
+    const [valueErr, setValueErr] = useState(false)
     const [priceValue, setPriceValue] = useState('---');
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
@@ -78,7 +79,10 @@ export const BuyTokenCard = () => {
 
         if (!inputValue) {
             console.error("Input value is not set");
+            setValueErr(true);
             return;
+        } else {
+            setInputValue('')
         }
 
         try {
@@ -119,7 +123,7 @@ export const BuyTokenCard = () => {
             } else if (error.message.includes("No tokens to claim")) {
                 alert("You don't have any tokens to claim. Make sure you participated in the presale.");
             } else {
-                console.log("Error claiming tokens: " + error.message);
+                console.log("Error: \n" + error.message);
             }
         } finally {
             setIsBuying(false);
@@ -244,6 +248,12 @@ useEffect(() => {
                     <Coins size={40}/>
                     BUY TOKEN
                 </button>
+
+                {valueErr && (
+                    <div className='flex w-full items-center pt-1 justify-center'>
+                        <p className='text-slate-50 font-light text-sm'>At least <span className='font-bold'>50 BRSK</span>!</p>
+                    </div>
+                )}
 
                 {connectedAddress && (
                     <button
