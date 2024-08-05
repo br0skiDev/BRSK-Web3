@@ -374,7 +374,7 @@ export const BuyTokenCard = () => {
             )}
 
             {isBuying && (
-                <div className='absolute top-0 left-0 flex w-full h-full justify-center items-center z-50 bg-black/90 rounded-md backdrop-blur-xl flex-col'>
+                <div className='absolute top-0 left-0 flex w-full h-full justify-center items-center z-40 bg-black/90 rounded-md backdrop-blur-xl flex-col'>
                     <Image src={"/assets/logo.png"} alt='LOGO' width={125} height={125} />
                     <h1 className='mt-4 text-slate-50/20 text-[9.4pt]'><span className='text-red-500 font-semibold text-[11pt]'>TRANSACTION IN PROGRESS</span><br/>Please wait.</h1>
                     <p></p>

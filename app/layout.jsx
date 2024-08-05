@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./more.css";
+import Image from "next/image";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
                 <div className="absolute w-full h-full left-0 top-0 flex items-center justify-center select-none blur-[1px]">
                     <h1 className="text-[140pt] font-black opacity-50 shadow-xl px-10 tracking-tighter">BRR____SK</h1>
                 </div>
+
                 {children}
+
             </main>
         </body>
     </html>
