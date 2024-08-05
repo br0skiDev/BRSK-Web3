@@ -228,12 +228,13 @@ export const BuyTokenCard = () => {
         const timeLeft = endTime - now;
 
         if (timeLeft <= 0) {
-            return { hours: 0, minutes: 0 };
+            return { days: 0, hours: 0, minutes: 0 };
         } else {
-            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
 
-            return { hours, minutes };
+            return { days, hours, minutes };
         }
     };
 
@@ -385,9 +386,9 @@ export const BuyTokenCard = () => {
             <div className='w-full mt-3 flex justify-center items-center text-xs text-yellow-300'>
                 Loading presale timer...
             </div>
-        ) : timeLeft.hours > 0 || timeLeft.minutes > 0 ? (
+        ) : timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 ? (
             <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>
-                ⏰ Presale ends in {timeLeft.hours}h {timeLeft.minutes}m.
+                ⏰ Presale ends in {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m.
             </div>
         ) : (
             <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300 flex-col'>
