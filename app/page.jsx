@@ -9,6 +9,10 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center w-full h-full">
 
+
+        <Image src={"/assets/presale.png"} alt="" width={90} height={600} className="z-50" />
+        <BuyTokenCard />
+
         <div className='absolute bottom-[30px] right-[45px]'>
             <Link href={"/balance"}>
                 <div className='py-[5px] px-[12px] rounded-full border-[0px] shadow-xl text-slate-50 hover:border-slate-200/50 hover:border-2 flex gap-2'>
@@ -17,7 +21,6 @@ export default function Home() {
             </Link>
         </div>
 
-        <BuyTokenCard />
         <div className="absolute left-2 bottom-2 flex flex-col text-slate-950">
         <div className="flex gap-2 items-center">
             <Image src={"/assets/sepolia.png"} alt="" width={34} height={34} />

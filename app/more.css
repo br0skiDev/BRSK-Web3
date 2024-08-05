@@ -6,4 +6,5 @@ body{
     align-items: center;
     flex-direction: column;
     background-color: rgb(42 52 55);
+    overflow: hidden;
 }
