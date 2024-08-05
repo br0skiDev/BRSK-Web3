@@ -22,8 +22,8 @@ export default function Home() {
         </div>
 
         <div className="absolute left-2 bottom-2 flex flex-col text-slate-950">
-        <div className="flex gap-2 items-center">
-            <Image src={"/assets/sepolia.png"} alt="" width={34} height={34} />
+        <div className="flex gap-2 items-center ml-2">
+            <Image src={"/assets/sepolia.png"} alt="" width={30} height={30} />
             <h1 className="font-bold text-md text-emerald-300">SepoliaETH</h1>
         </div>
             <div className="w-fit h-fit select-none p-2 rounded-lg backdrop-blur-lg drop-shadow-xl text-xs font-light text-emerald-100">
