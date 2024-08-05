@@ -92,16 +92,17 @@ contract Deploy is Script {
         vm.startBroadcast(deployerPrivateKey);
 
         BRSK token = new BRSK(1000000 * 10 ** 18); // 1 million tokens
-        uint256 rate = 100; // 1 ETH = 100 BRSK
+        uint256 rate = 2500; // 1 ETH = 2500 BRSK
         uint256 startTime = block.timestamp + 60; // Presale starts in 1 minute
-        uint256 endTime = startTime + 86400; // Presale lasts 24 hours
+        uint256 endTime = startTime + 300; // Presale lasts 5 minutes
         Presale presale = new Presale(address(token), rate, startTime, endTime);
 
-        token.transfer(address(presale), 800000 * 10 ** 18); // 800,000 tokens to presale contract
+        token.transfer(address(presale), 750000 * 10 ** 18); // 750,000 tokens to presale contract
 
         vm.stopBroadcast();
     }
 }
+
 ```
 
 ## Test
