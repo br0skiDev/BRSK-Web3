@@ -16,81 +16,6 @@ export const WithdrawCard = () => {
     const [isWithdrawing, setIsWithdrawing] = useState(false);
     const [ownerAddress, setOwnerAddress] = useState(null);
 
-
-
-    useEffect(() => {
-        const checkWalletConnection = async () => {
-            const walletDisconnected = localStorage.getItem('walletDisconnected');
-            if (typeof window.ethereum !== 'undefined' && walletDisconnected !== 'true') {
-                try {
-                    const _provider = new ethers.BrowserProvider(window.ethereum);
-                    const accounts = await _provider.listAccounts();
-                    if (accounts.length > 0) {
-                        const _signer = await _provider.getSigner();
-                        setProvider(_provider);
-                        setSigner(_signer);
-                        setConnectedAddress(accounts[0]);
-                        setWalletNotConnectedErr(false);
-
-                        const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
-                        setPresaleContract(_presaleContract);
-                    } else {
-                        setConnectedAddress(null);
-                    }
-                } catch (error) {
-                    console.error("Error checking wallet connection:", error);
-                }
-            } else {
-                setConnectedAddress(null);
-                setProvider(null);
-                setSigner(null);
-                setPresaleContract(null);
-            }
-        };
-
-        checkWalletConnection();
-    }, []);
-
-
-
-    const connectWallet = async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            try {
-                const _provider = new ethers.BrowserProvider(window.ethereum);
-                await _provider.send("eth_requestAccounts", []);
-                const _signer = await _provider.getSigner();
-                setProvider(_provider);
-                setSigner(_signer);
-                const accounts = await _provider.listAccounts();
-                if (accounts.length > 0) {
-                    setConnectedAddress(accounts[0]);
-                } else {
-                    setConnectedAddress(null);
-                }
-
-                const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
-                setPresaleContract(_presaleContract);
-
-                const _ownerAddress = await _presaleContract.owner();
-                setOwnerAddress(_ownerAddress);
-                console.log("Owner : " + _ownerAddress);
-
-            } catch (error) {
-                console.error("Error connecting to wallet:", error);
-            }
-        } else {
-            console.error("MetaMask is not installed");
-        }
-    };
-
-    const disconnectWallet = () => {
-        setConnectedAddress(null);
-        setProvider(null);
-        setSigner(null);
-        setPresaleContract(null);
-        localStorage.setItem('walletDisconnected', 'true');
-    };
-
     const fetchBalance = async () => {
         if (!presaleContract) {
             console.error("Presale contract is not initialized");
@@ -122,6 +47,85 @@ export const WithdrawCard = () => {
         } finally {
             setIsWithdrawing(false);
         }
+    };
+
+    useEffect(() => {
+        const checkWalletConnection = async () => {
+            const walletDisconnected = localStorage.getItem('walletDisconnected');
+            if (typeof window.ethereum !== 'undefined' && walletDisconnected !== 'true') {
+                try {
+                    const _provider = new ethers.BrowserProvider(window.ethereum);
+                    const accounts = await _provider.listAccounts();
+                    if (accounts.length > 0) {
+                        const _signer = await _provider.getSigner();
+                        setProvider(_provider);
+                        setSigner(_signer);
+                        setConnectedAddress(accounts[0]);
+
+                        const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
+                        setPresaleContract(_presaleContract);
+
+                        const _ownerAddress = await _presaleContract.owner();
+                        setOwnerAddress(_ownerAddress);
+                        fetchBalance();
+                    } else {
+                        setConnectedAddress(null);
+                    }
+                } catch (error) {
+                    console.error("Error checking wallet connection:", error);
+                }
+
+            } else {
+                setConnectedAddress(null);
+                setProvider(null);
+                setSigner(null);
+                setPresaleContract(null);
+            }
+        };
+
+        checkWalletConnection();
+    }, []);
+
+
+
+
+    const connectWallet = async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            try {
+                const _provider = new ethers.BrowserProvider(window.ethereum);
+                await _provider.send("eth_requestAccounts", []);
+                const _signer = await _provider.getSigner();
+                setProvider(_provider);
+                setSigner(_signer);
+                const accounts = await _provider.listAccounts();
+                if (accounts.length > 0) {
+                    setConnectedAddress(accounts[0]);
+                } else {
+                    setConnectedAddress(null);
+                }
+
+                const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
+                setPresaleContract(_presaleContract);
+
+                const _ownerAddress = await _presaleContract.owner();
+                setOwnerAddress(_ownerAddress);
+
+                localStorage.setItem('walletDisconnected', 'false');
+
+            } catch (error) {
+                console.error("Error connecting to wallet:", error);
+            }
+        } else {
+            console.error("MetaMask is not installed");
+        }
+    };
+
+    const disconnectWallet = () => {
+        setConnectedAddress(null);
+        setProvider(null);
+        setSigner(null);
+        setPresaleContract(null);
+        localStorage.setItem('walletDisconnected', 'true');
     };
 
     useEffect(() => {
