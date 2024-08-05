@@ -9,7 +9,7 @@ import { ArrowUp, Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-r
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
 const RATE = 250;
-const minimumBRSK = 50;
+const minimumBRSK = 1;
 
 export const BuyTokenCard = () => {
     const [presaleStartTime, setPresaleStartTime] = useState(null);
@@ -149,7 +149,7 @@ export const BuyTokenCard = () => {
             console.error("Input value is not set");
             setEmptyInputErr(true);
             return;
-        } else if (inputValue < 50) {
+        } else if (inputValue < minimumBRSK) {
             console.error(`You have to buy at least ${minimumBRSK} BRSK`);
             setAmountErr(true);
             return;
@@ -238,7 +238,7 @@ export const BuyTokenCard = () => {
     };
 
     return (
-        <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
+        <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm z-40'>
             <div className='flex h-[82px] w-fit'>
             <div className='mr-2 z-20 flex'>
                     <Image src="/assets/logo.png" alt='Logo' width={82} height={82} className='border-2 border-slate-700/70 rounded-full' />
@@ -356,7 +356,7 @@ export const BuyTokenCard = () => {
             </form>
 
             {showPopup && (
-                <div className="fixed inset-0 flex items-center justify-center">
+                <div className="fixed inset-0 flex items-center justify-center z-40">
                     <div className="p-4 rounded-lg shadow-lg bg-gray-800/90 border border-slate-50/10 drop-shadow-xl px-3 py-4 backdrop-blur-md">
                         <h2 className="text-xl font-bold mb-2 text-slate-50 select-none">Transaction Successful ✨</h2>
                         <p className="mb-2 select-none text-green-500">You bought <span className='font-bold'>{purchaseInfo.brskAmount} BRSK</span> for <span className='font-bold'>{purchaseInfo.amount} ETH</span></p>
@@ -374,7 +374,7 @@ export const BuyTokenCard = () => {
             )}
 
             {isBuying && (
-                <div className='absolute top-0 left-0 flex w-full h-full justify-center items-center z-40 bg-black/90 rounded-md backdrop-blur-xl flex-col'>
+                <div className='absolute top-0 left-0 flex w-full h-full justify-center items-center z-50 bg-black/90 rounded-md backdrop-blur-xl flex-col'>
                     <Image src={"/assets/logo.png"} alt='LOGO' width={125} height={125} />
                     <h1 className='mt-4 text-slate-50/20 text-[9.4pt]'><span className='text-red-500 font-semibold text-[11pt]'>TRANSACTION IN PROGRESS</span><br/>Please wait.</h1>
                     <p></p>

@@ -10,7 +10,7 @@ export default function Home() {
     <div className="flex items-center justify-center w-full h-full">
 
 
-        <Image src={"/assets/presale.png"} alt="PRESALE" width={81} height={209} className="z-40 w-auto h-full mr-[-15px]" />
+        <Image src={"/assets/presale.png"} alt="PRESALE" width={81} height={209} className="z-20 w-auto h-full mr-[-15px]" />
         <BuyTokenCard />
 
         <div className='absolute bottom-[30px] right-[45px]'>

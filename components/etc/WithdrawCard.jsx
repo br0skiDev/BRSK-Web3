@@ -15,10 +15,13 @@ export const WithdrawCard = () => {
     const [signer, setSigner] = useState(null);
     const [presaleContract, setPresaleContract] = useState(null);
     const [balance, setBalance] = useState(null);
+    const [userBalance, setUserBalance] = useState(null);
     const [isWithdrawing, setIsWithdrawing] = useState(false);
     const [ownerAddress, setOwnerAddress] = useState(null);
     const [presaleEndTime, setPresaleEndTime] = useState(null);
     const [timeLeft, setTimeLeft] = useState(null);
+
+
 
     const fetchBalance = async () => {
         console.log("Fetching balance...");
@@ -34,6 +37,12 @@ export const WithdrawCard = () => {
             const balance = await provider.getBalance(PRESALE_ADDRESS);
             console.log("Balance fetched:", ethers.formatEther(balance));
             setBalance(ethers.formatEther(balance));
+
+            if (presaleContract && connectedAddress) {
+                const userContribution = await presaleContract.contributions(connectedAddress.address);
+                console.log("User contribution fetched:", ethers.formatEther(userContribution));
+                setUserBalance(ethers.formatEther(userContribution));
+            }
         } catch (error) {
             console.error("Error fetching balance:", error);
         }
@@ -247,7 +256,18 @@ export const WithdrawCard = () => {
                 <p className='text-md text-slate-50 text-xs font-light'>
                     Presale Balance:
                 </p>
-                <p className='text-xl tracking-tighter text-slate-50 font-bold'>{balance !== null ? `${balance} ETH` : 'Connect wallet to see balance'}</p>
+                <p className='text-xl tracking-tighter text-slate-50 font-bold'>{balance !== null ? `${balance} ETH` : 'Connect wallet to see balance'}
+                </p>
+                {connectedAddress && (
+                    <>
+                        <p className='text-md text-slate-50 text-xs font-light mt-2'>
+                            Your Contribution:
+                        </p>
+                        <p className='text-xl tracking-tighter text-slate-50 font-bold'>
+                            {userBalance !== null ? `${userBalance} BRSK` : 'Loading...'}
+                        </p>
+                    </>
+                )}
             </div>
 
             {timeLeft === null ? (
