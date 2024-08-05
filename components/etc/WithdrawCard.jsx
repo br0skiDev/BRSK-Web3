@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
-import { Wallet, DollarSign } from 'lucide-react';
+import { Wallet, DollarSign, Clock } from 'lucide-react';
 
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
 
@@ -15,10 +15,12 @@ export const WithdrawCard = () => {
     const [balance, setBalance] = useState(null);
     const [isWithdrawing, setIsWithdrawing] = useState(false);
     const [ownerAddress, setOwnerAddress] = useState(null);
+    const [presaleEndTime, setPresaleEndTime] = useState(null);
+    const [timeLeft, setTimeLeft] = useState(null);
 
     const fetchBalance = async () => {
-        if (!presaleContract) {
-            console.error("Presale contract is not initialized");
+        if (!provider) {
+            console.error("Provider is not initialized");
             return;
         }
 
@@ -44,8 +46,26 @@ export const WithdrawCard = () => {
             fetchBalance();
         } catch (error) {
             console.error("Error withdrawing funds:", error);
+            alert("Error withdrawing funds: " + error.message);
         } finally {
             setIsWithdrawing(false);
+        }
+    };
+
+    const calculateTimeLeft = (endTime) => {
+        if (!endTime) return null;
+
+        const now = new Date();
+        const timeLeft = endTime - now;
+
+        if (timeLeft <= 0) {
+            return { days: 0, hours: 0, minutes: 0 };
+        } else {
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+
+            return { days, hours, minutes };
         }
     };
 
@@ -67,6 +87,10 @@ export const WithdrawCard = () => {
 
                         const _ownerAddress = await _presaleContract.owner();
                         setOwnerAddress(_ownerAddress);
+
+                        const _endTime = await _presaleContract.endTime();
+                        setPresaleEndTime(new Date(Number(_endTime) * 1000));
+
                         fetchBalance();
                     } else {
                         setConnectedAddress(null);
@@ -74,7 +98,6 @@ export const WithdrawCard = () => {
                 } catch (error) {
                     console.error("Error checking wallet connection:", error);
                 }
-
             } else {
                 setConnectedAddress(null);
                 setProvider(null);
@@ -86,8 +109,27 @@ export const WithdrawCard = () => {
         checkWalletConnection();
     }, []);
 
+    useEffect(() => {
+        const updateTimer = () => {
+            if (presaleEndTime) {
+                const time = calculateTimeLeft(presaleEndTime);
+                setTimeLeft(time);
+            }
+        };
 
+        updateTimer();
+        const intervalId = setInterval(updateTimer, 60000);
 
+        return () => clearInterval(intervalId);
+    }, [presaleEndTime]);
+
+    useEffect(() => {
+        if (provider) {
+            fetchBalance();
+            const intervalId = setInterval(fetchBalance, 30000); // Update balance every 30 seconds
+            return () => clearInterval(intervalId);
+        }
+    }, [provider]);
 
     const connectWallet = async () => {
         if (typeof window.ethereum !== 'undefined') {
@@ -110,8 +152,12 @@ export const WithdrawCard = () => {
                 const _ownerAddress = await _presaleContract.owner();
                 setOwnerAddress(_ownerAddress);
 
+                const _endTime = await _presaleContract.endTime();
+                setPresaleEndTime(new Date(Number(_endTime) * 1000));
+
                 localStorage.setItem('walletDisconnected', 'false');
 
+                fetchBalance();
             } catch (error) {
                 console.error("Error connecting to wallet:", error);
             }
@@ -125,14 +171,12 @@ export const WithdrawCard = () => {
         setProvider(null);
         setSigner(null);
         setPresaleContract(null);
+        setBalance(null);
+        setOwnerAddress(null);
+        setPresaleEndTime(null);
+        setTimeLeft(null);
         localStorage.setItem('walletDisconnected', 'true');
     };
-
-    useEffect(() => {
-        if (presaleContract) {
-            fetchBalance();
-        }
-    }, [presaleContract]);
 
     return (
         <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
@@ -170,15 +214,29 @@ export const WithdrawCard = () => {
                 <p className='text-md text-slate-50 text-xs font-light'>
                     Presale Balance:
                 </p>
-                <p className='text-xl tracking-tighter text-slate-50 font-bold'>{balance !== null ? `${balance} ETH` : 'connect wallet first'}</p>
+                <p className='text-xl tracking-tighter text-slate-50 font-bold'>{balance !== null ? `${balance} ETH` : 'Connect wallet to see balance'}</p>
             </div>
+
+            {timeLeft === null ? (
+                <div className='w-full mt-3 flex justify-center items-center text-xs text-yellow-300'>
+                    <Clock className="w-4 h-4 mr-1" /> Loading presale timer...
+                </div>
+            ) : timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0 ? (
+                <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>
+                    <Clock className="w-4 h-4 mr-1" /> Presale ends in {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m.
+                </div>
+            ) : (
+                <div className='w-full mt-3 flex justify-center items-center text-xs text-red-500'>
+                    <Clock className="w-4 h-4 mr-1" /> Presale has ended.
+                </div>
+            )}
 
             {connectedAddress && ownerAddress && connectedAddress.address.toLowerCase() === ownerAddress.toLowerCase() && (
                 <button
                     type="button"
                     onClick={withdrawFunds}
                     className='flex items-center justify-center gap-1 w-full py-2 border-2 border-slate-950/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-red-700 hover:bg-red-600 hover:border-slate-50 hover:text-slate-50'
-                    disabled={isWithdrawing}
+                    disabled={isWithdrawing || (timeLeft && (timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0))}
                 >
                     <DollarSign size={22} />
                     WITHDRAW

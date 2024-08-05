@@ -9,6 +9,7 @@ import { ArrowUp, Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-r
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
 const RATE = 250;
+const minimumBRSK = 50;
 
 export const BuyTokenCard = () => {
     const [presaleStartTime, setPresaleStartTime] = useState(null);
@@ -18,7 +19,6 @@ export const BuyTokenCard = () => {
     const [amountErr, setAmountErr] = useState(false);
     const [walletNotConnectedErr, setWalletNotConnectedErr] = useState(false)
     const [priceValue, setPriceValue] = useState('---');
-    const minimumBRSK = 50;
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
     const [signer, setSigner] = useState(null);
@@ -72,8 +72,6 @@ export const BuyTokenCard = () => {
                     const endTimeDate = new Date(Number(endTime) * 1000);
                     setPresaleStartTime(startTimeDate);
                     setPresaleEndTime(endTimeDate);
-                    console.log("Presale start time:", startTimeDate);
-                    console.log("Presale end time:", endTimeDate);
 
                     // Immediately update the timer
                     const time = calculateTimeLeft(endTimeDate);
@@ -278,7 +276,7 @@ export const BuyTokenCard = () => {
                 <p className='text-md text-slate-50 text-xs font-light'>
                     Buy BRSK with ETH
                 </p>
-                <p className='text-xl tracking-tighter text-slate-50 font-bold'>100 BRSK = 1 ETH</p>
+                <p className='text-xl tracking-tighter text-slate-50 font-bold'>250 BRSK = 1 ETH</p>
             </div>
 
             <div className='w-full grid grid-cols-3 mt-2 py-4 px-8 bg-slate-50/10 rounded'>
