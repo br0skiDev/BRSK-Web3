@@ -293,7 +293,7 @@ export const BuyTokenCard = () => {
 
             <form className='w-full h-fit flex flex-col mt-2'>
                 <div className='grid grid-cols-1 gap-2'>
-                    <h1 className='text-emerald-200 font-light text-sm'>You have to choose at least {minimumBRSK} BRSK</h1>
+                    <h1 className='text-emerald-200 font-light text-sm'>You have to buy at least {minimumBRSK} BRSK</h1>
                     <div className='flex justify-between items-center'>
                         <h1 className='text-slate-50 font-semibold underline-offset-4'>BRSK</h1>
                         <input

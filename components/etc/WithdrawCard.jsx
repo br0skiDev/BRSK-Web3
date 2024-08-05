@@ -8,8 +8,6 @@ import { LoadingDots } from './LoadingDots';
 
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
 
-console.log("PRESALE_ADDRESS:", PRESALE_ADDRESS);
-
 export const WithdrawCard = () => {
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
@@ -25,9 +23,6 @@ export const WithdrawCard = () => {
 
 
     const fetchBalance = async () => {
-        console.log("Fetching balance...");
-        console.log("Provider:", provider);
-        console.log("PRESALE_ADDRESS:", PRESALE_ADDRESS);
 
         if (!provider || !PRESALE_ADDRESS) {
             console.error("Provider or Presale Address is not initialized");
