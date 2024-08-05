@@ -8,23 +8,17 @@ import { ArrowUp, Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-r
 
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
-const RATE = 100;
-const DEPLOYMENT_TIME = new Date("Aug 03, 2024 05:49:12 UTC");
-const PRESALE_DURATION = 24 * 60 * 60 * 1000;
-
-
-
+const RATE = 250;
 
 export const BuyTokenCard = () => {
+    const [presaleStartTime, setPresaleStartTime] = useState(null);
+    const [presaleEndTime, setPresaleEndTime] = useState(null);
     const [inputValue, setInputValue] = useState('');
     const [emptyInputErr, setEmptyInputErr] = useState(false);
     const [amountErr, setAmountErr] = useState(false);
     const [walletNotConnectedErr, setWalletNotConnectedErr] = useState(false)
-
     const [priceValue, setPriceValue] = useState('---');
-
     const minimumBRSK = 50;
-
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
     const [signer, setSigner] = useState(null);
@@ -33,9 +27,7 @@ export const BuyTokenCard = () => {
     const [showPopup, setShowPopup] = useState(false);
     const [purchaseInfo, setPurchaseInfo] = useState({ hash: '', amount: '' });
     const [isBuying, setIsBuying] = useState(false);
-    const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
-
-
+    const [timeLeft, setTimeLeft] = useState(null);
 
     useEffect(() => {
         const checkWalletConnection = async () => {
@@ -70,8 +62,30 @@ export const BuyTokenCard = () => {
         checkWalletConnection();
     }, []);
 
+    useEffect(() => {
+        const initializePresale = async () => {
+            if (presaleContract) {
+                try {
+                    const startTime = await presaleContract.startTime();
+                    const endTime = await presaleContract.endTime();
+                    const startTimeDate = new Date(Number(startTime) * 1000);
+                    const endTimeDate = new Date(Number(endTime) * 1000);
+                    setPresaleStartTime(startTimeDate);
+                    setPresaleEndTime(endTimeDate);
+                    console.log("Presale start time:", startTimeDate);
+                    console.log("Presale end time:", endTimeDate);
 
+                    // Immediately update the timer
+                    const time = calculateTimeLeft(endTimeDate);
+                    setTimeLeft(time);
+                } catch (error) {
+                    console.error("Error fetching presale times:", error);
+                }
+            }
+        };
 
+        initializePresale();
+    }, [presaleContract]);
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -85,7 +99,6 @@ export const BuyTokenCard = () => {
             setPriceValue('---');
         }
     }, [inputValue]);
-
 
     const connectWallet = async () => {
         if (typeof window.ethereum !== 'undefined') {
@@ -105,7 +118,6 @@ export const BuyTokenCard = () => {
                 setWalletNotConnectedErr(false);
                 localStorage.setItem('walletDisconnected', 'false');
 
-
                 const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
                 setPresaleContract(_presaleContract);
             } catch (error) {
@@ -123,7 +135,6 @@ export const BuyTokenCard = () => {
         setPresaleContract(null);
         localStorage.setItem('walletDisconnected', 'true');
     };
-
 
     const buyTokens = async () => {
         if (!presaleContract) {
@@ -197,23 +208,25 @@ export const BuyTokenCard = () => {
         setShowPopup(false);
     };
 
-useEffect(() => {
-    const updateTimer = () => {
-        const time = calculateTimeLeft();
-        setTimeLeft(time);
-    };
+    useEffect(() => {
+        const updateTimer = () => {
+            if (presaleEndTime) {
+                const time = calculateTimeLeft(presaleEndTime);
+                console.log("Time left:", time);
+                setTimeLeft(time);
+            }
+        };
 
-    updateTimer();
-    const intervalId = setInterval(updateTimer, 60000);
+        updateTimer();
+        const intervalId = setInterval(updateTimer, 60000);
 
-    return () => clearInterval(intervalId);
-}, []);
+        return () => clearInterval(intervalId);
+    }, [presaleEndTime]);
 
+    const calculateTimeLeft = (endTime) => {
+        if (!endTime) return null;
 
-
-    const calculateTimeLeft = () => {
         const now = new Date();
-        const endTime = new Date(DEPLOYMENT_TIME.getTime() + PRESALE_DURATION);
         const timeLeft = endTime - now;
 
         if (timeLeft <= 0) {
@@ -225,7 +238,6 @@ useEffect(() => {
             return { hours, minutes };
         }
     };
-
 
     return (
         <div className='rounded-md h-fit w-[328px] flex flex-col bg-gray-800/70 border border-blue-200/20 drop-shadow-xl px-3 py-4 backdrop-blur-sm'>
@@ -371,16 +383,20 @@ useEffect(() => {
                 </div>
             )}
 
-            {timeLeft.minutes < 0 ? (
-                <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>
-                    ⏰ Presale ends in {timeLeft.hours}h {timeLeft.minutes}m.
-                </div>
-            ) : (
-                <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300 flex-col'>
-                    <h1 className='text-red-500 font-light'>❌ Presale has ended. You can&apos;t buy anymore.</h1>
-                    <span className='flex items-center gap-1 text-[10px]'>But you can claim your <Image src={"/assets/logo.png"} alt='' width={25} height={25} /> BRSK Token now!</span>
-                </div>
-            )}
+        {timeLeft === null ? (
+            <div className='w-full mt-3 flex justify-center items-center text-xs text-yellow-300'>
+                Loading presale timer...
+            </div>
+        ) : timeLeft.hours > 0 || timeLeft.minutes > 0 ? (
+            <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300'>
+                ⏰ Presale ends in {timeLeft.hours}h {timeLeft.minutes}m.
+            </div>
+        ) : (
+            <div className='w-full mt-3 flex justify-center items-center text-xs text-green-300 flex-col'>
+                <h1 className='text-red-500 font-light'>❌ Presale has ended. You can't buy anymore.</h1>
+                <span className='flex items-center gap-1 text-[10px]'>But you can claim your <Image src={"/assets/logo.png"} alt='' width={25} height={25} /> BRSK Token now!</span>
+            </div>
+        )}
         </div>
     );
 };
