@@ -163,7 +163,7 @@ export const BuyTokenCard = () => {
             const amountInWei = ethers.parseEther(amountInETH);
             const brskAmount = inputValue;
 
-            const tx = await presaleContract.buyTokens({ value: amountInWei });
+            const tx = await presaleContract.buyTokens({ value: amountInWei});
             setTransactionHash(tx.hash);
             await tx.wait();
             setPurchaseInfo({ hash: tx.hash, amount: amountInETH, brskAmount: brskAmount });
