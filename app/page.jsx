@@ -1,7 +1,10 @@
+"use client"
 import { BuyTokenCard } from "@/components/etc/BuyTokenCard";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+
+import { motion } from 'framer-motion'
 
 
 export default function Home() {
@@ -9,8 +12,16 @@ export default function Home() {
   return (
     <div className="flex items-center justify-center w-full h-full">
 
+        <motion.div
+            className="h-full w-fit z-20"
+           initial={{ opacity: 0, x: 200}}
+           animate={{ opacity: 1, x: 0}}
+           transition={{ duration: 0.3 }}
+        >
+            <Image priority src={"/assets/presale.png"} alt="PRESALE" width={81} height={209} className="z-20 w-auto h-full mr-[-15px]" />
+        </motion.div>
 
-        <Image src={"/assets/presale.png"} alt="PRESALE" width={81} height={209} className="z-20 w-auto h-full mr-[-15px]" />
+
         <BuyTokenCard />
 
         <div className='absolute bottom-[30px] right-[45px]'>

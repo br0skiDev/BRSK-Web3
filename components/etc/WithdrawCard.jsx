@@ -264,6 +264,12 @@ export const WithdrawCard = () => {
                             Your Contribution:
                         </p>
                         <p className='text-xl tracking-tighter text-slate-50 font-bold'>
+                            {userBalance !== null ? `${userBalance / 250} ETH` : 'Loading...'}
+                        </p>
+                        <p className='text-md text-slate-50 text-xs font-light mt-2'>
+                            Your BRSK Balance:
+                        </p>
+                        <p className='text-xl tracking-tighter text-slate-50 font-bold'>
                             {userBalance !== null ? `${userBalance} BRSK` : 'Loading...'}
                         </p>
                     </>
