@@ -73,7 +73,6 @@ export const BuyTokenCard = () => {
                     setPresaleStartTime(startTimeDate);
                     setPresaleEndTime(endTimeDate);
 
-                    // Immediately update the timer
                     const time = calculateTimeLeft(endTimeDate);
                     setTimeLeft(time);
                 } catch (error) {
