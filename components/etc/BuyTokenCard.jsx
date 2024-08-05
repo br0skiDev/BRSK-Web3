@@ -210,7 +210,6 @@ export const BuyTokenCard = () => {
         const updateTimer = () => {
             if (presaleEndTime) {
                 const time = calculateTimeLeft(presaleEndTime);
-                console.log("Time left:", time);
                 setTimeLeft(time);
             }
         };
