@@ -7,6 +7,8 @@ import { Wallet, DollarSign, Clock } from 'lucide-react';
 
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
 
+console.log("PRESALE_ADDRESS:", PRESALE_ADDRESS);
+
 export const WithdrawCard = () => {
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
@@ -19,13 +21,18 @@ export const WithdrawCard = () => {
     const [timeLeft, setTimeLeft] = useState(null);
 
     const fetchBalance = async () => {
-        if (!provider) {
-            console.error("Provider is not initialized");
+        console.log("Fetching balance...");
+        console.log("Provider:", provider);
+        console.log("PRESALE_ADDRESS:", PRESALE_ADDRESS);
+
+        if (!provider || !PRESALE_ADDRESS) {
+            console.error("Provider or Presale Address is not initialized");
             return;
         }
 
         try {
             const balance = await provider.getBalance(PRESALE_ADDRESS);
+            console.log("Balance fetched:", ethers.formatEther(balance));
             setBalance(ethers.formatEther(balance));
         } catch (error) {
             console.error("Error fetching balance:", error);
@@ -33,15 +40,34 @@ export const WithdrawCard = () => {
     };
 
     const withdrawFunds = async () => {
+        console.log("Withdraw button clicked");
+        console.log("presaleContract:", presaleContract);
+        console.log("connectedAddress:", connectedAddress);
+        console.log("ownerAddress:", ownerAddress);
+        console.log("timeLeft:", timeLeft);
+
         if (!presaleContract) {
             console.error("Presale contract is not initialized");
             return;
         }
 
+        if (!connectedAddress || !ownerAddress || connectedAddress.address.toLowerCase() !== ownerAddress.toLowerCase()) {
+            console.error("Not authorized to withdraw");
+            return;
+        }
+
+        if (timeLeft && (timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0)) {
+            console.error("Presale has not ended yet");
+            return;
+        }
+
         try {
             setIsWithdrawing(true);
+            console.log("Calling withdrawFunds on contract");
             const tx = await presaleContract.withdrawFunds();
+            console.log("Transaction sent:", tx.hash);
             await tx.wait();
+            console.log("Transaction confirmed");
             alert("Funds withdrawn successfully");
             fetchBalance();
         } catch (error) {
@@ -90,8 +116,6 @@ export const WithdrawCard = () => {
 
                         const _endTime = await _presaleContract.endTime();
                         setPresaleEndTime(new Date(Number(_endTime) * 1000));
-
-                        fetchBalance();
                     } else {
                         setConnectedAddress(null);
                     }
@@ -124,12 +148,13 @@ export const WithdrawCard = () => {
     }, [presaleEndTime]);
 
     useEffect(() => {
-        if (provider) {
+        if (provider && PRESALE_ADDRESS) {
+            console.log("Provider or PRESALE_ADDRESS updated, fetching balance...");
             fetchBalance();
             const intervalId = setInterval(fetchBalance, 30000); // Update balance every 30 seconds
             return () => clearInterval(intervalId);
         }
-    }, [provider]);
+    }, [provider, PRESALE_ADDRESS]);
 
     const connectWallet = async () => {
         if (typeof window.ethereum !== 'undefined') {
@@ -137,13 +162,21 @@ export const WithdrawCard = () => {
                 const _provider = new ethers.BrowserProvider(window.ethereum);
                 await _provider.send("eth_requestAccounts", []);
                 const _signer = await _provider.getSigner();
+
+                console.log("Setting provider...");
                 setProvider(_provider);
+
                 setSigner(_signer);
                 const accounts = await _provider.listAccounts();
                 if (accounts.length > 0) {
                     setConnectedAddress(accounts[0]);
                 } else {
                     setConnectedAddress(null);
+                    throw new Error("No accounts found after connecting.");
+                }
+
+                if (!PRESALE_ADDRESS) {
+                    throw new Error("PRESALE_ADDRESS is not set.");
                 }
 
                 const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
@@ -157,7 +190,7 @@ export const WithdrawCard = () => {
 
                 localStorage.setItem('walletDisconnected', 'false');
 
-                fetchBalance();
+                console.log("Wallet connected, provider set. Waiting for state update before fetching balance...");
             } catch (error) {
                 console.error("Error connecting to wallet:", error);
             }
@@ -235,7 +268,11 @@ export const WithdrawCard = () => {
                 <button
                     type="button"
                     onClick={withdrawFunds}
-                    className='flex items-center justify-center gap-1 w-full py-2 border-2 border-slate-950/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 bg-red-700 hover:bg-red-600 hover:border-slate-50 hover:text-slate-50'
+                    className={`flex items-center justify-center gap-1 w-full py-2 border-2 border-slate-950/80 rounded-sm mt-3 font-bold tracking-tighter text-3xl text-slate-50 ${
+                        isWithdrawing || (timeLeft && (timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0))
+                        ? 'bg-gray-500 cursor-not-allowed'
+                        : 'bg-red-700 hover:bg-red-600 hover:border-slate-50 hover:text-slate-50'
+                    }`}
                     disabled={isWithdrawing || (timeLeft && (timeLeft.days > 0 || timeLeft.hours > 0 || timeLeft.minutes > 0))}
                 >
                     <DollarSign size={22} />
