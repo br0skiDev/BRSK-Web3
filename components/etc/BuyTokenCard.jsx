@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { FaExchangeAlt } from 'react-icons/fa';
 import { ethers } from 'ethers';
 import { presaleABI } from '@/lib/presaleABI';
-import { Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-react';
+import { ArrowUp, Coins, CornerDownLeft, CornerLeftDown, Wallet } from 'lucide-react';
 
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
 const PRESALE_ADDRESS = process.env.NEXT_PUBLIC_PRESALE_ADDRESS;
@@ -12,10 +12,19 @@ const RATE = 100;
 const DEPLOYMENT_TIME = new Date("Aug 03, 2024 05:49:12 UTC");
 const PRESALE_DURATION = 24 * 60 * 60 * 1000;
 
+
+
+
 export const BuyTokenCard = () => {
     const [inputValue, setInputValue] = useState('');
-    const [valueErr, setValueErr] = useState(false)
+    const [emptyInputErr, setEmptyInputErr] = useState(false);
+    const [amountErr, setAmountErr] = useState(false);
+    const [walletNotConnectedErr, setWalletNotConnectedErr] = useState(false)
+
     const [priceValue, setPriceValue] = useState('---');
+
+    const minimumBRSK = 50;
+
     const [connectedAddress, setConnectedAddress] = useState(null);
     const [provider, setProvider] = useState(null);
     const [signer, setSigner] = useState(null);
@@ -25,6 +34,44 @@ export const BuyTokenCard = () => {
     const [purchaseInfo, setPurchaseInfo] = useState({ hash: '', amount: '' });
     const [isBuying, setIsBuying] = useState(false);
     const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0 });
+
+
+
+    useEffect(() => {
+        const checkWalletConnection = async () => {
+            const walletDisconnected = localStorage.getItem('walletDisconnected');
+            if (typeof window.ethereum !== 'undefined' && walletDisconnected !== 'true') {
+                try {
+                    const _provider = new ethers.BrowserProvider(window.ethereum);
+                    const accounts = await _provider.listAccounts();
+                    if (accounts.length > 0) {
+                        const _signer = await _provider.getSigner();
+                        setProvider(_provider);
+                        setSigner(_signer);
+                        setConnectedAddress(accounts[0]);
+                        setWalletNotConnectedErr(false);
+
+                        const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
+                        setPresaleContract(_presaleContract);
+                    } else {
+                        setConnectedAddress(null);
+                    }
+                } catch (error) {
+                    console.error("Error checking wallet connection:", error);
+                }
+            } else {
+                setConnectedAddress(null);
+                setProvider(null);
+                setSigner(null);
+                setPresaleContract(null);
+            }
+        };
+
+        checkWalletConnection();
+    }, []);
+
+
+
 
     const handleInputChange = (event) => {
         setInputValue(event.target.value);
@@ -38,6 +85,7 @@ export const BuyTokenCard = () => {
             setPriceValue('---');
         }
     }, [inputValue]);
+
 
     const connectWallet = async () => {
         if (typeof window.ethereum !== 'undefined') {
@@ -54,6 +102,10 @@ export const BuyTokenCard = () => {
                     setConnectedAddress(null);
                 }
 
+                setWalletNotConnectedErr(false);
+                localStorage.setItem('walletDisconnected', 'false');
+
+
                 const _presaleContract = new ethers.Contract(PRESALE_ADDRESS, presaleABI, _signer);
                 setPresaleContract(_presaleContract);
             } catch (error) {
@@ -69,20 +121,31 @@ export const BuyTokenCard = () => {
         setProvider(null);
         setSigner(null);
         setPresaleContract(null);
+        localStorage.setItem('walletDisconnected', 'true');
     };
+
 
     const buyTokens = async () => {
         if (!presaleContract) {
             console.error("Presale contract is not initialized");
+            setWalletNotConnectedErr(true);
+            setInputValue("")
             return;
         }
 
+        setAmountErr(false);
+        setEmptyInputErr(false);
+
         if (!inputValue) {
             console.error("Input value is not set");
-            setValueErr(true);
+            setEmptyInputErr(true);
+            return;
+        } else if (inputValue < 50) {
+            console.error(`You have to buy at least ${minimumBRSK} BRSK`);
+            setAmountErr(true);
             return;
         } else {
-            setInputValue('')
+            setInputValue('');
         }
 
         try {
@@ -194,6 +257,9 @@ useEffect(() => {
                         <button onClick={connectWallet} className='px-2 py-[1px] rounded-sm bg-slate-50 w-fit border-2 border-slate-50 text-xs mt-1 hover:bg-slate-200'>Connect Wallet</button>
                     </div>
                 )}
+                {walletNotConnectedErr && (
+                    <h1 className='text-xs flex items-center text-red-500'> <ArrowUp className='w-[10px]'/>Connect your wallet here!</h1>
+                )}
             </div>
 
             <div className='mt-2 w-full bg-gray-50/10 flex justify-center py-3 rounded-sm flex-col items-center rounded-t-lg'>
@@ -217,6 +283,7 @@ useEffect(() => {
 
             <form className='w-full h-fit flex flex-col mt-2'>
                 <div className='grid grid-cols-1 gap-2'>
+                    <h1 className='text-emerald-200 font-light text-sm'>You have to choose at least {minimumBRSK} BRSK</h1>
                     <div className='flex justify-between items-center'>
                         <h1 className='text-slate-50 font-semibold underline-offset-4'>BRSK</h1>
                         <input
@@ -249,9 +316,21 @@ useEffect(() => {
                     BUY TOKEN
                 </button>
 
-                {valueErr && (
+                {amountErr && (
                     <div className='flex w-full items-center pt-1 justify-center'>
-                        <p className='text-slate-50 font-light text-sm'>At least <span className='font-bold'>50 BRSK</span>!</p>
+                        <p className='text-slate-50 font-light text-sm'>At least <span className='font-bold'>{minimumBRSK} BRSK</span>!</p>
+                    </div>
+                )}
+
+                {emptyInputErr && (
+                    <div className='flex w-full items-center pt-1 justify-center'>
+                        <p className='text-slate-50 font-light text-[10.85px]'>You have to choose the amount of BRSK you want to buy!</p>
+                    </div>
+                )}
+
+                {walletNotConnectedErr && (
+                    <div className='flex w-full items-center pt-1 justify-center'>
+                        <p className='text-slate-50 font-light text-[10.85px]'>No wallet connected...</p>
                     </div>
                 )}
 
